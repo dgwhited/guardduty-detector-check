@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=62.0.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "guardduty-detector-check"
+authors = [
+    {name = "Dustin Whited", email = "dgwhited@gmail.com"},
+]
+description = "GuardDuty Detector and Publishing Destination Checker"
+requires-python = ">=3.9"
+version = "1.0.0"
+license = {file = "LICENSE"}
+readme = "README.md"
+dependencies = [
+    "boto3>=1.35.43",
+]
+
+[project.scripts]
+guardduty-detector-check = "gd_check:main"
+
+[project.urls]
+Repository = "https://github.com/dgwhited/guardduty-detector-check"
