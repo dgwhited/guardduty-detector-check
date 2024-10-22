@@ -2,6 +2,7 @@ import boto3
 import json
 import argparse
 
+
 def create_session(profile=None):
     """Creates a boto session
 
@@ -48,8 +49,10 @@ def get_detector_and_publishing_destination(session, region):
         detector_id = detector_ids[0]
     else:
         return {}
-    publishing_destination = client.list_publishing_destinations(DetectorId=detector_id).get("Destinations")
-    return {detector_id:publishing_destination}
+    publishing_destination = client.list_publishing_destinations(
+        DetectorId=detector_id
+    ).get("Destinations")
+    return {detector_id: publishing_destination}
 
 
 def get_enabled_regions(session):
@@ -63,8 +66,11 @@ def get_enabled_regions(session):
     """
     acct = create_client(session=session, service="account")
 
-    regions = acct.list_regions(MaxResults=50, RegionOptStatusContains=['ENABLED','ENABLING','ENABLED_BY_DEFAULT'])
-    region_names = [ region.get("RegionName") for region in regions.get("Regions") ]
+    regions = acct.list_regions(
+        MaxResults=50,
+        RegionOptStatusContains=["ENABLED", "ENABLING", "ENABLED_BY_DEFAULT"],
+    )
+    region_names = [region.get("RegionName") for region in regions.get("Regions")]
     return region_names
 
 
@@ -78,7 +84,14 @@ def main():
 
     region_names = get_enabled_regions(session)
 
-    guardduties = [{str(region):get_detector_and_publishing_destination(session=session, region=region)} for region in region_names ]
+    guardduties = [
+        {
+            str(region): get_detector_and_publishing_destination(
+                session=session, region=region
+            )
+        }
+        for region in region_names
+    ]
     print(json.dumps(guardduties, indent=2))
 
 
